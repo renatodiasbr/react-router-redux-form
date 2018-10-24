@@ -3,6 +3,14 @@ import { Field, reduxForm } from "redux-form";
 
 class PostNew extends Component {
   renderInputText(field) {
+    const {
+      meta: { touched, error }
+    } = field;
+
+    const inputClassName = `form-control ${
+      touched && error ? "is-invalid" : ""
+    }`;
+
     return (
       <div className="form-group row">
         <label htmlFor={field.input.name} className="col-12 col-form-label">
@@ -13,9 +21,11 @@ class PostNew extends Component {
             {...field.input}
             id={field.input.name}
             type="text"
-            className="form-control"
+            className={inputClassName}
           />
-          {field.meta.error}
+          <div className="invalid-feedback">
+            {field.meta.touched ? field.meta.error : ""}
+          </div>
         </div>
       </div>
     );
