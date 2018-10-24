@@ -1,3 +1,4 @@
 import { combineReducers } from "redux";
+import posts from "./posts";
 
-export default combineReducers({ data: {} });
+export default combineReducers({ posts });
