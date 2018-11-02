@@ -5,8 +5,10 @@ import { Provider } from "react-redux";
 import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import promise from "redux-promise";
+import ReduxToastr from "react-redux-toastr";
 
 import "bootstrap/dist/css/bootstrap.css";
+import "react-redux-toastr/lib/css/react-redux-toastr.min.css";
 import "./index.css";
 import reducers from "./reducers";
 import { PostIndex, PostNew, PostDetails } from "./components";
@@ -18,6 +20,7 @@ ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
       <div className="container">
+        <ReduxToastr progressBar />
         <Switch>
           <Route path="/post/new" component={PostNew} />
           <Route path="/post/:id" component={PostDetails} />

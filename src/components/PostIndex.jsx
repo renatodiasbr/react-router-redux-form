@@ -14,7 +14,7 @@ class PostIndex extends Component {
     return _.map(this.props.posts.data, post => {
       return (
         <li className="list-group-item" key={post.id}>
-          <Link to={`/post/${post.id}`}>{post.title}</Link>
+          <Link to={`/post/${post.id}`}> {post.title} </Link>{" "}
           <input
             type="button"
             value="Delete"
@@ -28,12 +28,6 @@ class PostIndex extends Component {
   render() {
     return (
       <React.Fragment>
-        {this.props.posts.error && (
-          <Alert cssClass="alert-danger">
-            <strong>Sorry, An unexpected error has occurred!</strong> Message:{" "}
-            {this.props.posts.error}
-          </Alert>
-        )}
         <div className="row">
           <div className="col-12 text-right">
             <Link className="btn btn-primary" to="/post/new">
@@ -44,7 +38,8 @@ class PostIndex extends Component {
         <div className="row">
           <div className="col-12">
             <h3>
-              Posts {this.props.posts.isFetching && <span>(Loading ...)</span>}
+              Posts
+              {this.props.posts.isFetching && <span> (Loading ...)</span>}
             </h3>
             <ul className="list-group">{this.renderPosts()}</ul>
           </div>
@@ -62,5 +57,7 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { fetchPosts }
+  {
+    fetchPosts
+  }
 )(PostIndex);

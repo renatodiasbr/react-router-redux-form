@@ -9,7 +9,7 @@ const Alert = ({ cssClass, children }) => {
       {children}
       <button
         type="button"
-        class="close"
+        className="close"
         data-dismiss="alert"
         aria-label="Close"
       >
