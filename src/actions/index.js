@@ -1,33 +1,47 @@
 import axios from "axios";
 import { toastr } from "react-redux-toastr";
 
-export const FETCHING_POSTS = "FETCHING_POSTS";
-export const FETCH_POSTS = "FETCH_POSTS";
-export const FETCH_POST = "FETCH_POST";
-export const CREATE_POSTS = "CREATE_POSTS";
-export const FETCH_POSTS_ERROR = "FETCH_POSTS_ERROR";
+export const REQUEST_POSTS = "REQUEST_POSTS";
+export const RECEIVE_POSTS = "RECEIVE_POSTS";
+export const REQUEST_POST = "REQUEST_POST";
+export const CREATE_POST = "CREATE_POST";
+export const REQUEST_POSTS_ERROR = "REQUEST_POSTS_ERROR";
 
-//const ROOT_URL = "http://reduxblog.herokuapp.com/api";
-const ROOT_URL = "http://localhost:8080/api";
-const API_KEY = "?key=258753159";
+const ROOT_URL = "http://reduxblog.herokuapp.com/api";
+//const ROOT_URL = "http://localhost:8080/api";
+
+//Add defaults
+axios.defaults.baseURL = ROOT_URL;
+axios.defaults.params = { key: 258753159 };
+
+// Add a request interceptor
+axios.interceptors.request.use(null, function(error) {
+  toastr.error("Error", error.message);
+  return Promise.reject(error);
+});
+
+// Add a response interceptor
+axios.interceptors.response.use(null, function(error) {
+  toastr.error("Error", error.message);
+  return Promise.reject(error);
+});
 
 export function fetchPosts() {
   return dispatch => {
     dispatch({
-      type: FETCHING_POSTS
+      type: REQUEST_POSTS
     });
-    axios.get(`${ROOT_URL}/posts${API_KEY}`).then(
+    axios.get("posts").then(
       response =>
         dispatch({
-          type: FETCH_POSTS,
+          type: RECEIVE_POSTS,
           data: response.data
         }),
       error => {
         dispatch({
-          type: FETCH_POSTS_ERROR,
+          type: REQUEST_POSTS_ERROR,
           error: error.message
         });
-        toastr.error("Error", error.message);
       }
     );
   };
@@ -36,17 +50,17 @@ export function fetchPosts() {
 export function fetchPost(id) {
   return dispatch => {
     dispatch({
-      type: FETCHING_POSTS
+      type: REQUEST_POSTS
     });
-    axios.get(`${ROOT_URL}/posts/${id}${API_KEY}`).then(
+    axios.get(`posts/${id}`).then(
       response =>
         dispatch({
-          type: FETCH_POST,
+          type: REQUEST_POST,
           data: response.data
         }),
       error =>
         dispatch({
-          type: FETCH_POSTS_ERROR,
+          type: REQUEST_POSTS_ERROR,
           error: error.message
         })
     );
@@ -54,12 +68,10 @@ export function fetchPost(id) {
 }
 
 export function createPost(post, callback) {
-  const request = axios
-    .post(`${ROOT_URL}/posts${API_KEY}`, post)
-    .then(() => callback());
+  const request = axios.post("posts", post).then(() => callback());
 
   return {
-    type: CREATE_POSTS,
+    type: CREATE_POST,
     payload: request
   };
 }

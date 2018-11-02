@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { fetchPost } from "../actions";
 
@@ -13,12 +14,18 @@ class PostDetails extends Component {
     const { post, isFetching } = this.props;
 
     if (!post) {
-      return <div>Loading ...</div>;
+      return (
+        <div>
+          <FontAwesomeIcon icon="spinner" spin /> Loading
+        </div>
+      );
     }
 
     return (
       <div>
-        <h3>Post Details {isFetching && <span>(Loading ...)</span>}</h3>
+        <h3>
+          Post Details {isFetching && <FontAwesomeIcon icon="spinner" spin />}
+        </h3>
         <div className="row">
           <div className="col-12">
             <dl className="row">

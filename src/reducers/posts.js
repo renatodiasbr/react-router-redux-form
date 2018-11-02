@@ -1,9 +1,9 @@
 import _ from "lodash";
 import {
-  FETCHING_POSTS,
-  FETCH_POSTS,
-  FETCH_POST,
-  FETCH_POSTS_ERROR
+  REQUEST_POSTS,
+  RECEIVE_POSTS,
+  REQUEST_POST,
+  REQUEST_POSTS_ERROR
 } from "../actions";
 
 const postsInitialState = {
@@ -14,20 +14,20 @@ const postsInitialState = {
 
 const posts = (state = postsInitialState, action) => {
   switch (action.type) {
-    case FETCHING_POSTS:
+    case REQUEST_POSTS:
       return {
         ...state,
         isFetching: true,
         error: ""
       };
-    case FETCH_POSTS:
+    case RECEIVE_POSTS:
       return {
         ...state,
         data: _.mapKeys(action.data, "id"),
         isFetching: false,
         error: ""
       };
-    case FETCH_POST:
+    case REQUEST_POST:
       let data = state.data;
       data[action.data.id] = action.data;
       return {
@@ -36,7 +36,7 @@ const posts = (state = postsInitialState, action) => {
         isFetching: false,
         error: ""
       };
-    case FETCH_POSTS_ERROR:
+    case REQUEST_POSTS_ERROR:
       return {
         ...state,
         isFetching: false,

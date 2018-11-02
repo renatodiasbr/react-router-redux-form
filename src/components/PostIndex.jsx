@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import _ from "lodash";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { fetchPosts } from "../actions";
-import { Alert } from ".";
 
 class PostIndex extends Component {
   componentDidMount() {
@@ -11,10 +11,11 @@ class PostIndex extends Component {
   }
 
   renderPosts() {
-    return _.map(this.props.posts.data, post => {
+    const { posts } = this.props;
+    return _.map(posts.data, post => {
       return (
         <li className="list-group-item" key={post.id}>
-          <Link to={`/post/${post.id}`}> {post.title} </Link>{" "}
+          <Link to={`/post/${post.id}`}>{post.title}</Link>
           <input
             type="button"
             value="Delete"
@@ -26,6 +27,7 @@ class PostIndex extends Component {
   }
 
   render() {
+    const { posts } = this.props;
     return (
       <React.Fragment>
         <div className="row">
@@ -38,9 +40,15 @@ class PostIndex extends Component {
         <div className="row">
           <div className="col-12">
             <h3>
-              Posts
-              {this.props.posts.isFetching && <span> (Loading ...)</span>}
+              Posts{" "}
+              {posts.isFetching && <FontAwesomeIcon icon="spinner" spin />}
             </h3>
+            {posts.error && (
+              <div className="alert alert-danger" role="alert">
+                An error has occurred while processing your request. Message:
+                {" " + posts.error}
+              </div>
+            )}
             <ul className="list-group">{this.renderPosts()}</ul>
           </div>
         </div>
