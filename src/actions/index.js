@@ -4,7 +4,13 @@ import { toastr } from "react-redux-toastr";
 export const REQUEST_POSTS = "REQUEST_POSTS";
 export const RECEIVE_POSTS = "RECEIVE_POSTS";
 export const REQUEST_POST = "REQUEST_POST";
-export const CREATE_POST = "CREATE_POST";
+export const RECEIVE_POST = "RECEIVE_POST";
+export const REQUEST_CREATE_POST = "REQUEST_CREATE_POST";
+export const RECEIVE_CREATE_POST = "RECEIVE_CREATE_POST";
+export const REQUEST_CREATE_POST_ERROR = "REQUEST_CREATE_POST_ERROR";
+export const REQUEST_DELETE_POST = "REQUEST_DELETE_POST";
+export const RECEIVE_DELETE_POST = "RECEIVE_DELETE_POST";
+export const REQUEST_DELETE_POST_ERROR = "REQUEST_DELETE_POST_ERROR";
 export const REQUEST_POSTS_ERROR = "REQUEST_POSTS_ERROR";
 
 const ROOT_URL = "http://reduxblog.herokuapp.com/api";
@@ -50,12 +56,12 @@ export function fetchPosts() {
 export function fetchPost(id) {
   return dispatch => {
     dispatch({
-      type: REQUEST_POSTS
+      type: REQUEST_POST
     });
     axios.get(`posts/${id}`).then(
       response =>
         dispatch({
-          type: REQUEST_POST,
+          type: RECEIVE_POST,
           data: response.data
         }),
       error =>
@@ -68,10 +74,26 @@ export function fetchPost(id) {
 }
 
 export function createPost(post, callback) {
-  const request = axios.post("posts", post).then(() => callback());
+  return async dispacth => {
+    try {
+      dispacth({ type: REQUEST_CREATE_POST });
+      const request = await axios.post("posts", post);
+      dispacth({ type: RECEIVE_CREATE_POST, data: request.data });
+      callback();
+    } catch (error) {
+      dispacth({ type: REQUEST_CREATE_POST_ERROR, error: error.message });
+    }
+  };
+}
 
-  return {
-    type: CREATE_POST,
-    payload: request
+export function deletePost(id) {
+  return async dispacth => {
+    try {
+      dispacth({ type: REQUEST_DELETE_POST, id });
+      await axios.delete(`posts/${id}`);
+      dispacth({ type: RECEIVE_DELETE_POST, id });
+    } catch (error) {
+      dispacth({ type: REQUEST_DELETE_POST_ERROR, error: error.message, id });
+    }
   };
 }

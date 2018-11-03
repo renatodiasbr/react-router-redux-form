@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Field, reduxForm } from "redux-form";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { createPost } from "../actions";
 
 class PostNew extends Component {
@@ -39,27 +40,32 @@ class PostNew extends Component {
   };
 
   render() {
-    const { handleSubmit } = this.props;
+    const { handleSubmit, posts } = this.props;
     return (
-      <form onSubmit={handleSubmit(this.onSubmit)}>
-        <Field name="title" label="Title:" component={this.renderInputText} />
-        <Field
-          name="categories"
-          label="Categories:"
-          component={this.renderInputText}
-        />
-        <Field
-          name="content"
-          label="Content:"
-          component={this.renderInputText}
-        />
-        <button type="submit" className="btn btn-primary">
-          Submit
-        </button>
-        <Link className="btn btn-secondary" to="/">
-          Cancel
-        </Link>
-      </form>
+      <React.Fragment>
+        <h3>
+          New Post {posts.isFetching && <FontAwesomeIcon icon="spinner" spin />}
+        </h3>
+        <form onSubmit={handleSubmit(this.onSubmit)}>
+          <Field name="title" label="Title:" component={this.renderInputText} />
+          <Field
+            name="categories"
+            label="Categories:"
+            component={this.renderInputText}
+          />
+          <Field
+            name="content"
+            label="Content:"
+            component={this.renderInputText}
+          />
+          <button type="submit" className="btn btn-primary">
+            Submit
+          </button>
+          <Link className="btn btn-secondary" to="/">
+            Cancel
+          </Link>
+        </form>
+      </React.Fragment>
     );
   }
 }
@@ -84,7 +90,7 @@ function validate(values) {
 
 export default reduxForm({ validate, form: "PostNew" })(
   connect(
-    null,
+    state => ({ posts: state.posts }),
     { createPost }
   )(PostNew)
 );

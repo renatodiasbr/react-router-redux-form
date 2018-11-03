@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import _ from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { fetchPosts } from "../actions";
+import { fetchPosts, deletePost } from "../actions";
 
 class PostIndex extends Component {
   componentDidMount() {
@@ -11,15 +11,18 @@ class PostIndex extends Component {
   }
 
   renderPosts() {
-    const { posts } = this.props;
+    const { posts, deletePost } = this.props;
     return _.map(posts.data, post => {
       return (
         <li className="list-group-item" key={post.id}>
-          <Link to={`/post/${post.id}`}>{post.title}</Link>
+          <Link to={`/post/${post.id}`}>{post.title}</Link>{" "}
+          {post.isDeleting && <FontAwesomeIcon icon="spinner" spin />}
           <input
             type="button"
             value="Delete"
             className="btn btn-sm btn-danger float-right"
+            disabled={post.isDeleting}
+            onClick={() => deletePost(post.id)}
           />
         </li>
       );
@@ -63,9 +66,12 @@ const mapStateToProps = state => {
   };
 };
 
+const mapDispatchToProps = {
+  fetchPosts,
+  deletePost
+};
+
 export default connect(
   mapStateToProps,
-  {
-    fetchPosts
-  }
+  mapDispatchToProps
 )(PostIndex);
