@@ -1,6 +1,6 @@
 import PostIndex from "./PostIndex";
 import PostNew from "./PostNew";
 import PostDetails from "./PostDetails";
-import Alert from "./Alert";
+import ConfirmDialog from "./ConfirmDialog";
 
-export { PostIndex, PostNew, Alert, PostDetails };
+export { PostIndex, PostNew, ConfirmDialog, PostDetails };

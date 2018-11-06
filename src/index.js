@@ -13,7 +13,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import "react-redux-toastr/lib/css/react-redux-toastr.min.css";
 import "./index.css";
 import reducers from "./reducers";
-import { PostIndex, PostNew, PostDetails } from "./components";
+import { PostIndex, PostNew, PostDetails, ConfirmDialog } from "./components";
 import * as serviceWorker from "./serviceWorker";
 
 library.add(faCoffee, faSpinner);
@@ -25,6 +25,7 @@ ReactDOM.render(
     <BrowserRouter>
       <div className="container">
         <ReduxToastr progressBar />
+        <ConfirmDialog />
         <Switch>
           <Route path="/post/new" component={PostNew} />
           <Route path="/post/:id" component={PostDetails} />
