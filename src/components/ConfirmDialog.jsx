@@ -7,8 +7,8 @@ import { confirm } from "../actions/confirmDialog";
 class ConfirmDialog extends Component {
   componentDidMount() {
     const { isVisible } = this.props.confirmDialog;
-    if (isVisible) $("#modal").modal("show");
-    $("#modal").on("hidden.bs.modal", () => {
+    if (isVisible) $(this.refs.modal).modal("show");
+    $(this.refs.modal).on("hidden.bs.modal", () => {
       const { isConfirmed, callback } = this.props.confirmDialog;
       if (isConfirmed) callback();
       this.props.confirm({ isVisible: false, isConfirmed: false });
@@ -16,13 +16,13 @@ class ConfirmDialog extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.confirmDialog.isVisible) $("#modal").modal("show");
-    else $("#modal").modal("hide");
+    if (nextProps.confirmDialog.isVisible) $(this.refs.modal).modal("show");
+    else $(this.refs.modal).modal("hide");
   }
 
   componentWillUnmount() {
-    $("#modal").off("hidden.bs.modal");
-    $("#modal").modal("dispose");
+    $(this.refs.modal).off("hidden.bs.modal");
+    $(this.refs.modal).modal("dispose");
   }
 
   onConfirm = () => {
@@ -32,7 +32,7 @@ class ConfirmDialog extends Component {
   render() {
     const { title, bodyText, btnLabel } = this.props.confirmDialog;
     return (
-      <div className="modal fade" tabIndex="-1" role="dialog" id="modal">
+      <div className="modal fade" tabIndex="-1" role="dialog" ref="modal">
         <div className="modal-dialog modal-dialog-centered" role="document">
           <div className="modal-content">
             <div className="modal-header">
